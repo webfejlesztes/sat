@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>analogni sat</title>
+    <style>
+        #my-canvas {
+            border: burlywood 30px solid;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="my-canvas" width="400" height="300">
+        Your web browser does not support canvas element.
+    </canvas>
+    <script>
+        window.onload = draw;
+        function draw() {
+            let myCanvas = document.getElementById("my-canvas");
+            if (myCanvas.getContext) {
+                let ctx = myCanvas.getContext('2d');
+                update(ctx);
+            } else {
+                alert("Canvas is not supported.");
+            }
+        }
+        let angle1 = 0;
+        let angle2 = 0;
+        let angle3 = 0;
+        function update(ctx) {
+            var d, h, m, s; 
+            d = new Date;
+            h = d.getHours();
+            m = d.getMinutes();
+
+            s = d.getSeconds();
+            h = h%12;
+            
+            console.log(h+"   "+m);
+            h = (h*Math.PI/6)+(m*Math.PI/(6*60))+(s*Math.PI/(360*60))
+            m = (m*Math.PI/30)+(s*Math.PI/(30*60));
+            s = s*Math.PI/30;
+
+            ctx.save();
+            ctx.clearRect(0, 0, 400, 300);
+            ctx.beginPath();
+            ctx.arc(200, 150, 10, 0, 2 * Math.PI);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.lineWidth = 8;  
+            ctx.beginPath();
+            ctx.moveTo(360, 150);
+            ctx.lineTo(400, 150);
+            ctx.closePath();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(40, 150);
+            ctx.lineTo(0, 150);
+            ctx.closePath();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(200, 0);
+            ctx.lineTo(200, 20);
+            ctx.closePath();
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(200, 300);
+            ctx.lineTo(200, 280);
+            ctx.closePath();
+            ctx.stroke();
+
+            var poluprecnik = 140;
+            ctx.translate(200, 150);
+            for(num = 1; num < 5; num++){
+                ang = (num * Math.PI/2)+Math.PI/6;
+                ctx.rotate(ang);
+                ctx.translate(0, -poluprecnik);
+                ctx.rotate(-ang);
+                ctx.fillText("o", 0, 0);
+                ctx.rotate(ang);
+                ctx.translate(0, poluprecnik);
+                ctx.rotate(-ang);
+                ang = (num * Math.PI/2)+Math.PI/3;
+                ctx.rotate(ang);
+                ctx.translate(0, -poluprecnik);
+                ctx.rotate(-ang);
+                ctx.fillText("o", 0, 0);
+                ctx.rotate(ang);
+                ctx.translate(0, poluprecnik);
+                ctx.rotate(-ang);
+            }
+            ctx.translate(-200, -150);
+
+            //sati
+            ctx.translate(200, 150);
+            ctx.rotate(h);
+            ctx.translate(-200, -150);
+            ctx.lineWidth = 10;  
+            ctx.lineCap = "round"
+            ctx.beginPath();
+            ctx.moveTo(200, 150);
+            ctx.lineTo(200, 45);
+            ctx.closePath();
+            ctx.stroke();
+            ctx.translate(200, 150);
+            ctx.rotate(-h);
+            ctx.translate(-200, -150);
+
+            //minute
+            ctx.translate(200, 150);
+            ctx.rotate(m);
+            ctx.translate(-200, -150);
+            ctx.lineWidth = 5;  
+            ctx.lineCap = "round"
+            ctx.beginPath();
+            ctx.moveTo(200, 150);
+            ctx.lineTo(200, 15);
+            ctx.closePath();
+            ctx.stroke();
+            ctx.translate(200, 150);
+            ctx.rotate(-m);
+            ctx.translate(-200, -150);
+
+            //sekundara            
+            ctx.translate(200, 150);
+            ctx.rotate(s);
+            ctx.translate(-200, -150);
+            ctx.lineWidth = 2;  
+            ctx.lineCap = "round"
+            ctx.strokeStyle = "orangered";
+            ctx.beginPath();
+            ctx.moveTo(200, 150);
+            ctx.lineTo(200, 5);
+            ctx.closePath();
+            ctx.stroke();
+            ctx.rotate(-(Math.PI / 180) * angle1);
+            ctx.restore();
+
+            requestId = requestAnimationFrame(function () {
+                update(ctx);
+                
+            });
+        }
+    </script>
+</body>
+</html>
